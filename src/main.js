@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import request from '@/utils/request'
 
 import App from './App'
 import store from './store'
@@ -21,6 +22,8 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+// 挂载request实例
+Vue.prototype.$request = request
 
 console.log(process.env)
 
