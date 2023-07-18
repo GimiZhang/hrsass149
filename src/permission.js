@@ -19,7 +19,15 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // 如果有token，跳转其他页面，正常放行
-      next()
+
+      if (Object.keys(store.state.user.userInfo).length <= 0) {
+        store.dispatch('user/getUserInfo').then((res) => {
+          next()
+        })
+      } else {
+        next()
+      }
+
       NProgress.done()
     }
   } else {

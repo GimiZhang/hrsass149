@@ -12,5 +12,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description 设置左侧导航栏 头部是否显示
    */
-  sidebarLogo: false
+  sidebarLogo: true
 }
