@@ -13,7 +13,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/common/bigUserHeader.png" class="user-avatar">
+          <img v-imageerror="defaultImg" :src="staffPhoto" class="user-avatar">
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" style="color: #fff" />
         </div>
@@ -39,13 +39,19 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
+import head from '@/assets/common/bigUserHeader.png'
 
 export default {
   components: {
     Hamburger
   },
+  data() {
+    return {
+      defaultImg: head
+    }
+  },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'name'])
+    ...mapGetters(['sidebar', 'avatar', 'name', 'staffPhoto'])
   },
   created() {
     // this.getUserInfo()
@@ -56,7 +62,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      await this.$store.dispatch('user/loginOut')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

@@ -1,5 +1,5 @@
 import { loginApi, getUserInfoApi, getBaseUserInfoApi } from '@/api/user'
-import { getToken, setToken, setUserInfo } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
   token: getToken() || '',
@@ -13,7 +13,16 @@ const mutations = {
   },
   setUserInfo(state, newUserInfo) {
     state.userInfo = newUserInfo
-    setUserInfo(newUserInfo)
+    // setUserInfo(newUserInfo) // cookie中不需要保存用户信息，只需要保存到vuex中即可
+  },
+
+  clearToken(state) {
+    state.token = ''
+    removeToken()
+  },
+
+  clearUserInfo(state) {
+    state.userInfo = {}
   }
 }
 
@@ -39,6 +48,10 @@ const actions = {
     // return new Promise((resolve, reject) => {
 
     // })
+  },
+  loginOut({ commit }) {
+    commit('clearToken')
+    commit('clearUserInfo')
   }
 }
 
