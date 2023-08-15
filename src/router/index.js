@@ -5,6 +5,29 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import approvalsRouter from '@/router/modules/approvals'
+import attendancesRouter from '@/router/modules/attendances'
+import departmentsRouter from '@/router/modules/departments'
+import employeesRouter from '@/router/modules/employees'
+import permissionRouter from '@/router/modules/permission'
+import salarysRouter from '@/router/modules/salarys'
+import settingRouter from '@/router/modules/setting'
+import socialRouter from '@/router/modules/social'
+
+/**
+ *  动态路由数组表
+ */
+
+export const asyncRoutes = [
+  departmentsRouter,
+  settingRouter,
+  employeesRouter,
+  permissionRouter,
+  approvalsRouter,
+  attendancesRouter,
+  salarysRouter,
+  socialRouter
+]
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -47,35 +70,25 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
-  },
-  {
-    path: '/approvals',
-    component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'approvals',
-        component: () => import('@/views/approvals/index'),
-        meta: { title: '审批', icon: 'approvals' }
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '首页', icon: 'dashboard' }
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: [...constantRoutes, ...asyncRoutes]
+  })
 
 const router = createRouter()
 
