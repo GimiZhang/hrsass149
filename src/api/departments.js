@@ -29,3 +29,28 @@ export const addDepartmentApi = (data) => {
     data
   })
 }
+
+/**
+ * 修改部门
+ * @param {*} id
+ * @returns
+ */
+export const getDepartmentApi = (id) => {
+  return request({
+    url: `/company/department/${id}`
+  })
+}
+
+/**
+ * 修改部门信息
+ * @param {*} form
+ * @returns
+ */
+export const editDepartmentApi = form => {
+  return request({
+    url: `/company/department/${form.id}`,
+    method: 'put',
+    data: form
+  })
+}
+

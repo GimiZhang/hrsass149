@@ -1,9 +1,10 @@
 <template>
   <el-dialog
-    title="新增部门"
+    :title="showTitle"
     :visible="showDialog"
     :close-on-click-modal="false"
     @close="closeDialog"
+    @open="openDialog"
   >
     <!-- el-form form表单 -->
     <el-form ref="addFrom" label-width="120px" :model="form" :rules="rules">
@@ -24,7 +25,7 @@
 
     </el-form>
     <div slot="footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button @click="closeDialog">取 消</el-button>
       <el-button type="primary" @click="submitDepts">确 定</el-button>
     </div>
   </el-dialog>
@@ -32,7 +33,7 @@
 
 <script>
 import { getSimpleUserListApi } from '@/api/employees'
-import { addDepartmentApi } from '@/api/departments'
+import { addDepartmentApi, getDepartmentApi, editDepartmentApi } from '@/api/departments'
 export default {
   name: 'AddDepts',
   props: {
@@ -80,16 +81,45 @@ export default {
       }
     }
   },
+  computed: {
+    showTitle() {
+      return this.form.id ? '编辑部门' : '新增部门'
+    }
+  },
+  created() {},
   methods: {
     closeDialog() {
-      this.$emit('closeDialogFn', false)
+      this.$emit('update:showDialog', false)
+      this.$refs.addFrom.resetFields()
+      this.form = {
+        name: '', // 部门名称
+        code: '', // 部门编码
+        manager: '', // 部门管理者
+        introduce: '' // 部门介绍
+      }
     },
     validatDeptNameIsRepeat(rule, value, callback) {
-      const children = this.departList.filter(item => item.pid === this.nodeData.id)
+      let children = []
+      if (this.form.id) {
+        if (this.nodeData.name === value) {
+          callback()
+          return
+        }
+        children = this.departList.filter(item => item.pid === this.nodeData.pid) || []
+      } else {
+        children = this.departList.filter(item => item.pid === this.nodeData.id)
+      }
+
       const isRpeat = children.some(item => item.name === value)
       isRpeat ? callback(new Error('当前部门已经存在')) : callback()
     },
     validatDeptCodeIsRepeat(rule, value, callback) {
+      if (this.form.id) {
+        if (this.nodeData.code === value) {
+          callback()
+          return
+        }
+      }
       const isRpeat = this.departList.some(item => item.code === value)
       isRpeat ? callback(new Error('部门编码已经存在')) : callback()
     },
@@ -101,11 +131,22 @@ export default {
       this.$refs.addFrom.validate(async flag => {
         // 确定提交时再次校验表单
         if (!flag) return
-        addDepartmentApi({ ...this.form, pid: this.nodeData.id })
-        this.$message.success('添加成功')
+        if (this.form.id) {
+          await editDepartmentApi(this.form)
+        } else {
+          addDepartmentApi({ ...this.form, pid: this.nodeData.id })
+          this.$message.success('添加成功')
+        }
         this.closeDialog()
         this.$emit('add-depts-success')
       })
+    },
+    openDialog() {
+      this.getSimpleUserList()
+    },
+    async getDepartmentDetailInfo() {
+      const { data } = await getDepartmentApi(this.nodeData.id)
+      this.form = data
     }
   }
 }

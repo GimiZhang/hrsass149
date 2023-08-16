@@ -1,18 +1,18 @@
 <template>
   <div class="departments-container">
     <div class="app-container">
-      <el-card>
+      <el-card v-loading="isLoading">
         <!-- 用了一个行列布局 -->
         <tree-tools :node-data="company" :is-root="true" @add-depts="showAddDepts" />
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <template #default="{data}">
             <!-- // 子类调用父类方法 del-depts，删除或者修改完数据后，调用此方法刷新列表 -->
-            <treeTools :node-data="data" @del-depts="getDepartMentsList" @add-depts="showAddDepts" />
+            <treeTools :node-data="data" @del-depts="getDepartMentsList" @add-depts="showAddDepts" @edit-depts="showEditDepts" />
 
           </template>
         </el-tree>
       </el-card>
-      <add-depts ref="addDepts" :show-dialog="showDialog" :depart-list="departList" :node-data="nodeData" @add-depts-success="getDepartMentsList" @closeDialogFn="closeDialog" />
+      <add-depts ref="addDepts" :show-dialog.sync="showDialog" :depart-list="departList" :node-data="nodeData" @add-depts-success="getDepartMentsList" />
     </div>
   </div>
 </template>
@@ -46,7 +46,8 @@ export default {
         label: 'name'
       },
       showDialog: false,
-      nodeData: {}
+      nodeData: {},
+      isLoading: false
     }
   },
   created() {
@@ -54,10 +55,12 @@ export default {
   },
   methods: {
     async getDepartMentsList() {
+      this.isLoading = true
       const { data } = await getDepartmentListApi()
       this.departList = data.depts
       this.departs = tranListToTreeData(data.depts, '')
       this.company.name = data.companyName
+      this.isLoading = false
     },
     closeDialog() {
       this.showDialog = false
@@ -65,8 +68,13 @@ export default {
     showAddDepts(nodeData) {
       this.showDialog = true
       this.nodeData = nodeData
-      console.log(this.nodeData)
-      this.$refs.addDepts.getSimpleUserList()
+    },
+    showEditDepts(nodeData) {
+      this.showDialog = true
+      this.nodeData = nodeData
+      this.$nextTick(() => {
+        this.$refs.addDepts.getDepartmentDetailInfo()
+      })
     }
   }
 }

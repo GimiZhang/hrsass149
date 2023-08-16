@@ -71,7 +71,7 @@ export default {
           })
           break
         case 'edit':
-          console.log('修改')
+          this.$emit('edit-depts', this.nodeData)
           break
       }
     }
