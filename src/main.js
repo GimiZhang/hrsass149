@@ -13,10 +13,11 @@ import * as directives from '@/directives' // 批量导入
 import App from './App'
 import store from './store'
 import router from './router'
+import components from './components/index'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+Vue.use(components)
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

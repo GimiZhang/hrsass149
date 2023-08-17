@@ -41,3 +41,27 @@ export const addRolApi = (form) => {
   })
 }
 
+/**
+ * 根据id获取角色详情
+ * @param {*} id
+ * @returns
+ */
+export const getRolDetailApi = (id) => {
+  return request({
+    url: `/sys/role/${id}`
+  })
+}
+
+/**
+ * 编辑角色信息
+ * @param {*} id
+ * @returns
+ */
+export const editRolApi = (form) => {
+  return request({
+    url: `/sys/role/${form.id}`,
+    method: 'put',
+    data: form
+  })
+}
+
