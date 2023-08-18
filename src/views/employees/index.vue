@@ -35,10 +35,10 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="280">
-            <template>
+            <template #default="row">
               <el-button type="text" size="small">查看</el-button>
               <el-button type="text" size="small">分配角色</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,16 +57,16 @@
 </template>
 
 <script>
-import { getUserListApi } from '@/api/employees'
+import { getUserListApi, delEmployeeApi } from '@/api/employees'
 import enumObj from '@/constant/employees'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 export default {
   name: 'Employees',
-  filters: {
-    getFormateTime(val) {
-      return dayjs(val).format('YYYY-MM-DD')
-    }
-  },
+  // filters: {
+  //   getFormateTime(val) {
+  //     return dayjs(val).format('YYYY-MM-DD')
+  //   }
+  // },
   data() {
     return {
       page: 1,
@@ -100,8 +100,10 @@ export default {
       const obj = this.hireType.find(item => item.id === cellValue)
       // return cellValue === 1 ? '正式' : '非正式'
       return obj ? obj.value : '未知'
+    },
+    async delEmployee(id) {
+      await delEmployeeApi(id)
     }
-
   }
 }
 </script>

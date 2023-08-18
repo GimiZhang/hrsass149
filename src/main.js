@@ -10,6 +10,7 @@ import '@/styles/index.scss' // global css
 import request from '@/utils/request'
 // import { imageerror } from '@/directives' // 单个导入
 import * as directives from '@/directives' // 批量导入
+import * as filters from '@/filters'
 import App from './App'
 import store from './store'
 import router from './router'
@@ -37,6 +38,10 @@ Vue.prototype.$request = request
 // 这是第二种注册方式
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
+})
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
 })
 console.log(process.env)
 
