@@ -37,3 +37,11 @@ export const delEmployeeApi = (id) => {
     method: 'delete'
   })
 }
+
+export const addEmployeeApi = form => {
+  return request({
+    url: '/sys/user',
+    method: 'post',
+    data: form
+  })
+}

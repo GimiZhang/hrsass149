@@ -1,7 +1,8 @@
 /**
  * Created by PanJiaChen on 16/11/18.
  */
-
+// 导入dayjs
+import dayjs from 'dayjs'
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -127,4 +128,9 @@ export const tranListToTreeData = (list, searchValue) => {
   })
 
   return arr
+}
+
+// 格式化日期
+export function formatDate(value, str = 'YYYY年MM月DD日') {
+  return dayjs(value).format(str)
 }

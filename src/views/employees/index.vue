@@ -9,7 +9,7 @@
         <template #right>
           <el-button type="warning" size="small">excel导入</el-button>
           <el-button type="danger" size="small">excel导出</el-button>
-          <el-button type="primary" size="small">新增员工</el-button>
+          <el-button type="primary" size="small" @click="showAddEmplyeeDialog">新增员工</el-button>
         </template>
       </page-tools>
 
@@ -52,6 +52,7 @@
           />
         </div>
       </el-card>
+      <addEmployee :show-dialog.sync="showDialog" />
     </div>
   </div>
 </template>
@@ -59,6 +60,7 @@
 <script>
 import { getUserListApi, delEmployeeApi } from '@/api/employees'
 import enumObj from '@/constant/employees'
+import addEmployee from '@/views/employees/components/add-employee.vue'
 // import dayjs from 'dayjs'
 export default {
   name: 'Employees',
@@ -67,13 +69,17 @@ export default {
   //     return dayjs(val).format('YYYY-MM-DD')
   //   }
   // },
+  components: {
+    addEmployee
+  },
   data() {
     return {
       page: 1,
       size: 5,
       list: [],
       total: 10,
-      hireType: enumObj.hireType
+      hireType: enumObj.hireType,
+      showDialog: false
     }
   },
   created() {
@@ -103,6 +109,9 @@ export default {
     },
     async delEmployee(id) {
       await delEmployeeApi(id)
+    },
+    showAddEmplyeeDialog() {
+      this.showDialog = true
     }
   }
 }
