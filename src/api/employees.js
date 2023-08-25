@@ -45,3 +45,11 @@ export const addEmployeeApi = form => {
     data: form
   })
 }
+
+export const batchAddEmployeeApi = list => {
+  return request({
+    url: '/sys/user/batch',
+    method: 'post',
+    data: list
+  })
+}
